@@ -17,7 +17,8 @@ class WSGIServer(threading.Thread):
     def __init__(self, host='127.0.0.1', port=0, application=None, **kwargs):
         self.app = application
         self._server = make_server(host, port, self.app, **kwargs)
-        self.server_address = self._server.server_address
+        self.host = self._server.server_address[0]
+        self.port = self._server.server_address[1]
 
         super(WSGIServer, self).__init__(
             name=self.__class__,
@@ -28,3 +29,7 @@ class WSGIServer(threading.Thread):
 
     def stop(self):
         self._server.shutdown()
+
+    @property
+    def url(self):
+        return 'http://{0}:{1}'.format(self.host, self.port)

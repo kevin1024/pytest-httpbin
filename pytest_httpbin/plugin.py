@@ -1,10 +1,12 @@
 from __future__ import absolute_import
-from .packages import httpbin
+import pytest
+from . import packages
 from . import serve
 
-def pytest_funcarg_httpbin(request):
+@pytest.fixture(scope='session')
+def httpbin(request):
     from pytest_httpbin import serve
-    server = serve.WSGIServer(application=httpbin.app)
+    server = serve.WSGIServer(application=packages.httpbin.app)
     server.start()
-    request.addfinalizer(server.stop())
+    request.addfinalizer(server.stop)
     return server
