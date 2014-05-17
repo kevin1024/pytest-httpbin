@@ -3,7 +3,7 @@ import codecs
 import os
 import re
 
-import pytest-httpbin
+import pytest_httpbin
 
 here = os.path.abspath(os.path.dirname(__file__))
 
@@ -16,13 +16,13 @@ setup(
 
     # There are various approaches to referencing the version. For a discussion,
     # see http://packaging.python.org/en/latest/tutorial.html#version
-    version=pytest-httpbin.__version__,
+    version=pytest_httpbin.__version__,
 
     description="A pytest plugin for including a httpbin server in your tests",
     long_description=long_description,
 
     # The project URL.
-    url='https://github.com/pypa/pytest-httpbinproject',
+    url='https://github.com/kevin1024/pytest-httpbin',
 
     # Author details
     author='Kevin McCarthy',
@@ -48,5 +48,12 @@ setup(
     # What does your project relate to?
     keywords='pytest-httpbin testing pytest httpbin',
     packages=find_packages(exclude=["contrib", "docs", "tests*"]),
-    install_requires = ['httpbin'],
+    install_requires = ['Flask'],
+
+    # the following makes a plugin available to pytest
+    entry_points = {
+        'pytest11': [
+            'httpbin = pytest_httpbin.plugin',
+        ]
+    },
 )

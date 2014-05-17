@@ -1,4 +1,5 @@
-import httpbin
+from __future__ import absolute_import
+from .packages import httpbin
 from . import serve
 
 def pytest_funcarg_httpbin(request):

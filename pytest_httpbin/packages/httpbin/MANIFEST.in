@@ -1,2 +1,0 @@
-include README.md LICENSE AUTHORS requirements.txt
-include httpbin/templates/*
