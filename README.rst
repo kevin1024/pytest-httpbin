@@ -24,4 +24,10 @@ def test_that_my_library_works_kinda_ok(httpbin_secure):
     assert requests.get(httpbin_secure.url + '/get/').status_code == 200
 ```
 
-It's actually starting 2 web servers in separate threads in the background: one HTTP and one HTTPS.  `pytest-httpbin` includes a self-signed certificate.  If your library verifies certificates against a CA (and it should), you'll have to add the CA from pytest-httpbin.  SHOW DOCS ON HOW TO DO THIS SHIT HERE.
+It's actually starting 2 web servers in separate threads in the background: one HTTP and one HTTPS.  `pytest-httpbin` includes a self-signed certificate.  If your library verifies certificates against a CA (and it should), you'll have to add the CA from pytest-httpbin.  The path to the pytest-httpbin CA bundle can by found like this `python -m pytest_httpbin.certs`.
+
+For example in requests, you can set the `REQUESTS_CA_BUNDLE` python path.  You can run your tests like this:
+
+```bash
+REQUESTS_CA_BUNDLE=`python -m pytest_httpbin.certs` py.test tests/
+```
