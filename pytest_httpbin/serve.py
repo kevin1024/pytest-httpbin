@@ -4,7 +4,6 @@ import threading
 import ssl
 from wsgiref.simple_server import WSGIServer, make_server
 import tempfile
-
 from six import BytesIO
 
 CERT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'certs')
@@ -24,7 +23,7 @@ class SecureWSGIServer(WSGIServer):
             server_side=True
         )
         self.RequestHandlerClass(ssock, client_address, self)
-        #ssock.unwrap().close()
+        # ssock.unwrap().close()
 
 
 class Server(threading.Thread):
