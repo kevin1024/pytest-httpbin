@@ -34,6 +34,20 @@ For example in requests, you can set the `REQUESTS_CA_BUNDLE` python path.  You 
 REQUESTS_CA_BUNDLE=`python -m pytest_httpbin.certs` py.test tests/
 ```
 
+# Installation
+
+All you need to do is this:
+
+```bash
+pip install pytest-httpbin
+```
+
+and your tests executed by pytest all will have access to the `httpbin` and `httpbin_secure` funcargs.  Cool right?
+
+# Support and dependencies
+
+pytest-httpbin suports pythons 2.6, 2.7, pypy, and 3.4.  It will automatically install httpbin and flask when you install it from pypi.
+
 # License
 
 MIT
