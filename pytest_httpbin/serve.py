@@ -1,3 +1,4 @@
+import os
 import sys
 import threading
 import ssl
@@ -7,7 +8,8 @@ import tempfile
 from six import BytesIO
 
 from . import compat
-from .certs import make_ssl_devcert
+
+CERT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'certs')
 
 
 class SecureWSGIServer(WSGIServer):
@@ -15,17 +17,14 @@ class SecureWSGIServer(WSGIServer):
     def finish_request(self, request, client_address):
         """Negotiates SSL and then mimics BaseServer behavior.
         """
-        # Note: accessing self.* from here might not be thread-safe,
-        # which could be an issue when using ThreadingMixIn.
-        # In practice, the GIL probably prevents any trouble with read access.
-
-        with tempfile.TemporaryDirectory() as tmpdir:
-            cert_file_path, pkey_file_path = make_ssl_devcert(tmpdir)
-
-            ssock = ssl.wrap_socket(request,
-                keyfile=pkey_file_path, certfile=cert_file_path, server_side=True)
-            self.RequestHandlerClass(ssock, client_address, self)
-            #ssock.unwrap().close()
+        ssock = ssl.wrap_socket(
+            request,
+            keyfile=os.path.join(CERT_DIR, 'key.pem'),
+            certfile=os.path.join(CERT_DIR, 'cert.pem'),
+            server_side=True
+        )
+        self.RequestHandlerClass(ssock, client_address, self)
+        #ssock.unwrap().close()
 
 
 class Server(threading.Thread):
