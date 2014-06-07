@@ -7,8 +7,6 @@ import tempfile
 
 from six import BytesIO
 
-from . import compat
-
 CERT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'certs')
 
 
