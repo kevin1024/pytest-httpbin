@@ -7,7 +7,7 @@ import tempfile
 
 from six import BytesIO
 
-CERT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'certs')
+CERT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'certs')
 
 
 class SecureWSGIServer(WSGIServer):
@@ -15,6 +15,8 @@ class SecureWSGIServer(WSGIServer):
     def finish_request(self, request, client_address):
         """Negotiates SSL and then mimics BaseServer behavior.
         """
+        assert os.path.exists(os.path.join(CERT_DIR, 'key.pem'))
+        assert os.path.exists(os.path.join(CERT_DIR, 'cert.pem'))
         ssock = ssl.wrap_socket(
             request,
             keyfile=os.path.join(CERT_DIR, 'key.pem'),
