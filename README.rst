@@ -1,6 +1,8 @@
 pytest-httpbin
 =======================
 
+**UNDER DEVELOPMENT, not yet released**
+
 [httpbin](https://httpbin.org/) is an amazing web service for testing HTTP libraries.  It has several great endpoints that can test pretty much everything you need in a HTTP library.  The only problem is: maybe you don't want to wait for your tests to travel across the Internet and back to make assertions against a remote web service.
 
 Enter `pytest-httpbin`.  Pytest-httpbin creates a pytest "fixture" that is dependency-injected into your tests. It automatically starts up a HTTP server in a separate thread running httpbin and provides your test with the URL in the fixture.  Check out this example:
@@ -31,3 +33,7 @@ For example in requests, you can set the `REQUESTS_CA_BUNDLE` python path.  You 
 ```bash
 REQUESTS_CA_BUNDLE=`python -m pytest_httpbin.certs` py.test tests/
 ```
+
+# License
+
+MIT
