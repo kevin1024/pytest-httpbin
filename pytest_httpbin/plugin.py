@@ -7,7 +7,16 @@ from . import serve
 def httpbin(request):
     from pytest_httpbin import serve
     httpbin_app.debug = True
-    server = serve.WSGIServer(application=httpbin_app)
+    server = serve.Server(application=httpbin_app)
+    server.start()
+    request.addfinalizer(server.stop)
+    return server
+
+@pytest.fixture(scope='session')
+def httpbin_secure(request):
+    from pytest_httpbin import serve
+    httpbin_app.debug = True
+    server = serve.SecureServer(application=httpbin_app)
     server.start()
     request.addfinalizer(server.stop)
     return server

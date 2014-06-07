@@ -1,15 +1,34 @@
-import json
 import sys
 import threading
+import ssl
+from wsgiref.simple_server import WSGIServer, make_server
+import tempfile
 
-from werkzeug.serving import make_server
-from werkzeug.wrappers import Response, Request
+from six import BytesIO
 
-# Note: mostly stolen from pytest-localserver
-# https://bitbucket.org/basti/pytest-localserver/src/66c7bb00d8f8e537421e66a602b6bb31ee5b6f61/pytest_localserver/http.py?at=default
+from . import compat
+from .certs import make_ssl_devcert
 
 
-class WSGIServer(threading.Thread):
+class SecureWSGIServer(WSGIServer):
+
+    def finish_request(self, request, client_address):
+        """Negotiates SSL and then mimics BaseServer behavior.
+        """
+        # Note: accessing self.* from here might not be thread-safe,
+        # which could be an issue when using ThreadingMixIn.
+        # In practice, the GIL probably prevents any trouble with read access.
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            cert_file_path, pkey_file_path = make_ssl_devcert(tmpdir)
+
+            ssock = ssl.wrap_socket(request,
+                keyfile=pkey_file_path, certfile=cert_file_path, server_side=True)
+            self.RequestHandlerClass(ssock, client_address, self)
+            #ssock.unwrap().close()
+
+
+class Server(threading.Thread):
     """
     HTTP server running a WSGI application in its own thread.
     """
@@ -20,7 +39,7 @@ class WSGIServer(threading.Thread):
         self.host = self._server.server_address[0]
         self.port = self._server.server_address[1]
 
-        super(WSGIServer, self).__init__(
+        super(Server, self).__init__(
             name=self.__class__,
             target=self._server.serve_forever)
 
@@ -33,3 +52,13 @@ class WSGIServer(threading.Thread):
     @property
     def url(self):
         return 'http://{0}:{1}'.format(self.host, self.port)
+
+
+class SecureServer(Server):
+    def __init__(self, host='127.0.0.1', port=0, application=None, **kwargs):
+        kwargs['server_class'] = SecureWSGIServer
+        super(SecureServer, self).__init__(host, port, application, **kwargs)
+
+    @property
+    def url(self):
+        return 'https://{0}:{1}'.format(self.host, self.port)
