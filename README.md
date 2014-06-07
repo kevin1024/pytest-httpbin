@@ -46,7 +46,7 @@ and your tests executed by pytest all will have access to the `httpbin` and `htt
 
 # Support and dependencies
 
-pytest-httpbin suports pythons 2.6, 2.7, pypy, and 3.4.  It will automatically install httpbin and flask when you install it from pypi.
+pytest-httpbin suports Python 2.6, 2.7, 3.4, and pypy.  It will automatically install httpbin and flask when you install it from pypi.
 
 # License
 
