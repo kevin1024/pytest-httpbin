@@ -36,7 +36,7 @@ For example in requests, you can set the `REQUESTS_CA_BUNDLE` python path.  You 
 REQUESTS_CA_BUNDLE=`python -m pytest_httpbin.certs` py.test tests/
 ```
 
-# Testing both HTTP and HTTPS endpoints with one test
+## Testing both HTTP and HTTPS endpoints with one test
 
 If you ever find yourself needing to test both the http and https version of and endpoint, you can use the `httpbin_both` funcarg like this:
 
@@ -48,7 +48,7 @@ def test_that_my_library_works_kinda_ok(httpbin_both):
 
 Through the magic of pytest parametrization, this function will actually execute twice: once with an http url and once with an https url.
 
-# Installation
+## Installation
 
 All you need to do is this:
 
@@ -58,11 +58,11 @@ pip install pytest-httpbin
 
 and your tests executed by pytest all will have access to the `httpbin` and `httpbin_secure` funcargs.  Cool right?
 
-# Support and dependencies
+## Support and dependencies
 
 pytest-httpbin suports Python 2.6, 2.7, 3.4, and pypy.  It will automatically install httpbin and flask when you install it from pypi.
 
-# Running the pytest-httpbin test suite
+## Running the pytest-httpbin test suite
 
 If you want to run pytest-httpbin's test suite, you'll need to install requests and pytest, and then use the ./runtests.sh script.
 
@@ -78,7 +78,7 @@ pip install tox
 tox
 ```
 
-# License
+## License
 
 The MIT License (MIT)
 
