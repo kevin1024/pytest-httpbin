@@ -12,10 +12,9 @@ CERT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'certs')
 class SecureWSGIServer(WSGIServer):
 
     def finish_request(self, request, client_address):
-        """Negotiates SSL and then mimics BaseServer behavior.
         """
-        assert os.path.exists(os.path.join(CERT_DIR, 'key.pem'))
-        assert os.path.exists(os.path.join(CERT_DIR, 'cert.pem'))
+        Negotiates SSL and then mimics BaseServer behavior.
+        """
         ssock = ssl.wrap_socket(
             request,
             keyfile=os.path.join(CERT_DIR, 'key.pem'),
@@ -23,7 +22,8 @@ class SecureWSGIServer(WSGIServer):
             server_side=True
         )
         self.RequestHandlerClass(ssock, client_address, self)
-        # ssock.unwrap().close()
+        # WSGIRequestHandler seems to close the socket for us.
+        # Thanks, WSGIRequestHandler!!
 
 
 class Server(threading.Thread):
