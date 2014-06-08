@@ -6,7 +6,6 @@ from . import serve
 
 @pytest.fixture(scope='session')
 def httpbin(request):
-    httpbin_app.debug = True
     server = serve.Server(application=httpbin_app)
     server.start()
     request.addfinalizer(server.stop)
@@ -15,7 +14,6 @@ def httpbin(request):
 
 @pytest.fixture(scope='session')
 def httpbin_secure(request):
-    httpbin_app.debug = True
     server = serve.SecureServer(application=httpbin_app)
     server.start()
     request.addfinalizer(server.stop)
