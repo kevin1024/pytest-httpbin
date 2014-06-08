@@ -18,7 +18,7 @@ setup(
     # see http://packaging.python.org/en/latest/tutorial.html#version
     version=pytest_httpbin.__version__,
 
-    description="A pytest plugin for including a httpbin server in your tests",
+    description="Easily test your HTTP library against a local copy of httpbin",
     long_description=long_description,
 
     # The project URL.
