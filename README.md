@@ -60,6 +60,22 @@ and your tests executed by pytest all will have access to the `httpbin` and `htt
 
 pytest-httpbin suports Python 2.6, 2.7, 3.4, and pypy.  It will automatically install httpbin and flask when you install it from pypi.
 
+# Running the pytest-httpbin test suite
+
+If you want to run pytest-httpbin's test suite, you'll need to install requests and pytest, and then use the ./runtests.sh script.
+
+```bash
+pip install pytest
+/.runtests.sh
+```
+
+Also, you can use tox to run the tests on all supported python versions:
+
+```bash
+pip install tox
+tox
+```
+
 # License
 
 The MIT License (MIT)
