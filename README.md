@@ -44,6 +44,8 @@ def test_that_my_library_works_kinda_ok(httpbin_both):
     assert requests.get(httpbin_both.url + '/get/').status_code == 200
 ```
 
+Through the magic of pytest parametrization, this function will actually execute twice: once with an http url and once with an https url.
+
 # Installation
 
 All you need to do is this:
