@@ -1,6 +1,8 @@
 pytest-httpbin
 =======================
 
+[![Build Status](https://travis-ci.org/kevin1024/pytest-httpbin.svg?branch=master)](https://travis-ci.org/kevin1024/pytest-httpbin)
+
 **UNDER DEVELOPMENT, not yet released**
 
 [httpbin](https://httpbin.org/) is an amazing web service for testing HTTP libraries.  It has several great endpoints that can test pretty much everything you need in a HTTP library.  The only problem is: maybe you don't want to wait for your tests to travel across the Internet and back to make assertions against a remote web service.
