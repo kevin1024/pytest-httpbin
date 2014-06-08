@@ -1,5 +1,4 @@
-pytest-httpbin
-=======================
+# pytest-httpbin
 
 [![Build Status](https://travis-ci.org/kevin1024/pytest-httpbin.svg?branch=master)](https://travis-ci.org/kevin1024/pytest-httpbin)
 
