@@ -34,6 +34,16 @@ For example in requests, you can set the `REQUESTS_CA_BUNDLE` python path.  You 
 REQUESTS_CA_BUNDLE=`python -m pytest_httpbin.certs` py.test tests/
 ```
 
+# Testing both HTTP and HTTPS endpoints with one test
+
+If you ever find yourself needing to test both the http and https version of and endpoint, you can use the `httpbin_both` funcarg like this:
+
+
+```python
+def test_that_my_library_works_kinda_ok(httpbin_both):
+    assert requests.get(httpbin_both.url + '/get/').status_code == 200
+```
+
 # Installation
 
 All you need to do is this:

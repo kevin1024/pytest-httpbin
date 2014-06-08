@@ -6,7 +6,6 @@ from . import serve
 
 @pytest.fixture(scope='session')
 def httpbin(request):
-    from pytest_httpbin import serve
     httpbin_app.debug = True
     server = serve.Server(application=httpbin_app)
     server.start()
@@ -16,9 +15,18 @@ def httpbin(request):
 
 @pytest.fixture(scope='session')
 def httpbin_secure(request):
-    from pytest_httpbin import serve
     httpbin_app.debug = True
     server = serve.SecureServer(application=httpbin_app)
     server.start()
     request.addfinalizer(server.stop)
     return server
+
+
+@pytest.fixture(scope='session', params=['http','https'])
+def httpbin_both(request, httpbin, httpbin_secure):
+    if request.param == 'http':
+        return httpbin
+    elif request.param == 'https':
+        return httpbin_secure
+
+
