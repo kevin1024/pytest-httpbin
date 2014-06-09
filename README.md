@@ -47,7 +47,7 @@ and the following methods:
 
   * join(string): Returns the results of calling `urlparse.urljoin` with the url from the injected server automatically applied as the first argument.  You supply the second argument
 
-Also, if you call `str(httpbin)` or `unicode(httpbin)`, you will get the url of the injected server.  This means you can do stuff like `httpbin + '/get' instead of `httpbin.url + '/get'.
+Also, I defined __add__ on the object to append to `httpbin.url`.  This means you can do stuff like `httpbin + '/get' instead of `httpbin.url + '/get'.
 
 ## Testing both HTTP and HTTPS endpoints with one test
 

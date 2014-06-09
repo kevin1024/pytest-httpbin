@@ -21,3 +21,10 @@ def test_httpbin_both(httpbin_both):
     # this test will get called twice, once with an http url, once with an
     # https url
     assert requests.get(httpbin_both.url + '/get').status_code == 200
+
+def test_httpbin_join(httpbin):
+    assert httpbin.join('foo') == httpbin.url + '/foo'
+
+def test_httpbin_str(httpbin):
+    assert httpbin + '/foo' == httpbin.url + '/foo'
+

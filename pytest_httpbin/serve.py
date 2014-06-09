@@ -2,9 +2,10 @@ import os
 import sys
 import threading
 import ssl
-from wsgiref.simple_server import WSGIServer, make_server
 import tempfile
+from wsgiref.simple_server import WSGIServer, make_server
 from six import BytesIO
+from six.moves.urllib.parse import urljoin
 
 CERT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'certs')
 
@@ -36,6 +37,7 @@ class Server(threading.Thread):
         self._server = make_server(host, port, self.app, **kwargs)
         self.host = self._server.server_address[0]
         self.port = self._server.server_address[1]
+        self.protocol = 'http'
 
         super(Server, self).__init__(
             name=self.__class__,
@@ -44,19 +46,22 @@ class Server(threading.Thread):
     def __del__(self):
         self.stop()
 
+    def __add__(self, other):
+        return self.url + other
+
     def stop(self):
         self._server.shutdown()
 
     @property
     def url(self):
-        return 'http://{0}:{1}'.format(self.host, self.port)
+        return '{0}://{1}:{2}'.format(self.protocol, self.host, self.port)
+
+    def join(self, url, allow_fragments=True):
+        return urljoin(self.url, url, allow_fragments=allow_fragments)
 
 
 class SecureServer(Server):
     def __init__(self, host='127.0.0.1', port=0, application=None, **kwargs):
         kwargs['server_class'] = SecureWSGIServer
         super(SecureServer, self).__init__(host, port, application, **kwargs)
-
-    @property
-    def url(self):
-        return 'https://{0}:{1}'.format(self.host, self.port)
+        self.protocol = 'https'
