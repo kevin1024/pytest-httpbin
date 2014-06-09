@@ -20,6 +20,13 @@ def test_that_my_library_works_kinda_ok():
     assert requests.get('http://httpbin.org/get').status_code == 200
 ```
 
+If you're making a lot of requests to httpbin, it can radically speed up your tests.
+
+![demo](http://i.imgur.com/heNOQLP.gif)
+
+
+# HTTPS support
+
 pytest-httpbin also supports HTTPS:
 
 ```python
