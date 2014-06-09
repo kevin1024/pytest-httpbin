@@ -4,9 +4,9 @@
 
 **UNDER DEVELOPMENT, not yet released**
 
-[httpbin](https://httpbin.org/) is an amazing web service for testing HTTP libraries.  It has several great endpoints that can test pretty much everything you need in a HTTP library.  The only problem is: maybe you don't want to wait for your tests to travel across the Internet and back to make assertions against a remote web service.
+[httpbin](https://httpbin.org/) is an amazing web service for testing HTTP libraries.  It has several great endpoints that can test pretty much everything you need in a HTTP library.  The only problem is: maybe you don't want to wait for your tests to travel across the Internet and back to make assertions against a remote web service (speed), and maybe you want to work offline (convenience).
 
-Enter **pytest-httpbin**.  Pytest-httpbin creates a pytest "fixture" that is dependency-injected into your tests. It automatically starts up a HTTP server in a separate thread running httpbin and provides your test with the URL in the fixture.  Check out this example:
+Enter **pytest-httpbin**.  Pytest-httpbin creates a [pytest fixture](http://pytest.org/latest/fixture.html) that is dependency-injected into your tests.  It automatically starts up a HTTP server in a separate thread running httpbin and provides your test with the URL in the fixture.  Check out this example:
 
 ```python
 def test_that_my_library_works_kinda_ok(httpbin):
