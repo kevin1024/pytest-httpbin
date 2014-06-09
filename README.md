@@ -27,13 +27,27 @@ def test_that_my_library_works_kinda_ok(httpbin_secure):
     assert requests.get(httpbin_secure.url + '/get/').status_code == 200
 ```
 
-It's actually starting 2 web servers in separate threads in the background: one HTTP and one HTTPS.  `pytest-httpbin` includes a self-signed certificate.  If your library verifies certificates against a CA (and it should), you'll have to add the CA from pytest-httpbin.  The path to the pytest-httpbin CA bundle can by found like this `python -m pytest_httpbin.certs`.
+It's actually starting 2 web servers in separate threads in the background: one HTTP and one HTTPS. The servers are started on a random port, on the loopback interface on your machine. Pytest-httpbin includes a self-signed certificate.  If your library verifies certificates against a CA (and it should), you'll have to add the CA from pytest-httpbin.  The path to the pytest-httpbin CA bundle can by found like this `python -m pytest_httpbin.certs`.
 
 For example in requests, you can set the `REQUESTS_CA_BUNDLE` python path.  You can run your tests like this:
 
 ```bash
 REQUESTS_CA_BUNDLE=`python -m pytest_httpbin.certs` py.test tests/
 ```
+
+# API of the injected object
+
+The injected object has the following attributes:
+
+  * url
+  * port
+  * host
+
+and the following methods:
+
+  * join(string): Returns the results of calling `urlparse.urljoin` with the url from the injected server automatically applied as the first argument.  You supply the second argument
+
+Also, if you call `str(httpbin)` or `unicode(httpbin)`, you will get the url of the injected server.  This means you can do stuff like `httpbin + '/get' instead of `httpbin.url + '/get'.
 
 ## Testing both HTTP and HTTPS endpoints with one test
 
