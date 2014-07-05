@@ -23,6 +23,7 @@ class ServerHandler(SimpleHandler):
         finally:
             SimpleHandler.close(self)
 
+
 class Handler(WSGIRequestHandler):
 
 
@@ -38,6 +39,16 @@ class Handler(WSGIRequestHandler):
         )
         handler.request_handler = self      # backpointer for logging
         handler.run(self.server.get_app())
+
+    def get_environ(self):
+        """
+        wsgiref simple server adds content-type text/plain to everything, this
+        removes it if it's not actually in the headers.
+        """
+        environ = super(Handler, self).get_environ().copy()
+        if self.headers.get('content-type') is None:
+            del environ['CONTENT_TYPE']
+        return environ 
 
 
 class SecureWSGIServer(WSGIServer):
