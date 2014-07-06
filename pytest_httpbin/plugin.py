@@ -20,11 +20,9 @@ def httpbin_secure(request):
     return server
 
 
-@pytest.fixture(scope='session', params=['http','https'])
+@pytest.fixture(scope='session', params=['http', 'https'])
 def httpbin_both(request, httpbin, httpbin_secure):
     if request.param == 'http':
         return httpbin
     elif request.param == 'https':
         return httpbin_secure
-
-

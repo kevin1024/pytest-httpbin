@@ -1,15 +1,14 @@
 import os
-import sys
 import threading
 import ssl
-import tempfile
 from wsgiref.simple_server import WSGIServer, make_server, WSGIRequestHandler
 from wsgiref.handlers import SimpleHandler
-from http.server import HTTPServer, BaseHTTPRequestHandler
-from six import BytesIO
 from six.moves.urllib.parse import urljoin
 
+
 CERT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'certs')
+
+
 class ServerHandler(SimpleHandler):
 
     server_software = 'Pytest-HTTPBIN/0.1.0'
@@ -18,7 +17,7 @@ class ServerHandler(SimpleHandler):
     def close(self):
         try:
             self.request_handler.log_request(
-                self.status.split(' ',1)[0], self.bytes_sent
+                self.status.split(' ', 1)[0], self.bytes_sent
             )
         finally:
             SimpleHandler.close(self)
@@ -26,12 +25,11 @@ class ServerHandler(SimpleHandler):
 
 class Handler(WSGIRequestHandler):
 
-
     def handle(self):
         """Handle a single HTTP request"""
 
         self.raw_requestline = self.rfile.readline()
-        if not self.parse_request(): # An error code has been sent, just exit
+        if not self.parse_request():  # An error code has been sent, just exit
             return
 
         handler = ServerHandler(
@@ -45,10 +43,11 @@ class Handler(WSGIRequestHandler):
         wsgiref simple server adds content-type text/plain to everything, this
         removes it if it's not actually in the headers.
         """
-        environ = super(Handler, self).get_environ().copy()
+        # Note: Can't use super since this is an oldstyle class in python 2.x
+        environ = WSGIRequestHandler.get_environ(self).copy()
         if self.headers.get('content-type') is None:
             del environ['CONTENT_TYPE']
-        return environ 
+        return environ
 
 
 class SecureWSGIServer(WSGIServer):
@@ -73,9 +72,15 @@ class Server(threading.Thread):
     HTTP server running a WSGI application in its own thread.
     """
 
-    def __init__(self, host='127.0.0.1', port=0, application=None):
+    def __init__(self, host='127.0.0.1', port=0, application=None, **kwargs):
         self.app = application
-        self._server = make_server(host, port, self.app, handler_class=Handler)
+        self._server = make_server(
+            host,
+            port,
+            self.app,
+            handler_class=Handler,
+            **kwargs
+        )
         self.host = self._server.server_address[0]
         self.port = self._server.server_address[1]
         self.protocol = 'http'
