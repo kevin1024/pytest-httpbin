@@ -3,7 +3,6 @@
 # vim: set fileencoding=utf8 :
 
 import requests
-import pytest
 from util import get_raw_http_response
 
 def test_content_type_header_not_automatically_added(httpbin):
@@ -12,13 +11,18 @@ def test_content_type_header_not_automatically_added(httpbin):
     """
     assert 'Content-Type' not in requests.get(httpbin + '/headers').json()['headers']
 
-@pytest.mark.xfail(reason='httpbin bug')
 def test_unicode_data(httpbin):
     """
     UTF-8 was not getting recognized for what it was and being encoded as if it
     was binary, see issue #7
     """
-    resp = requests.post(httpbin + '/post', data=u'оживлённым'.encode('utf-8'))
+    resp = requests.post(
+        httpbin + '/post',
+        data=u'оживлённым'.encode('utf-8'),
+        headers= {
+            'content-type': 'text/html; charset=utf-8',
+        }
+    )
     assert resp.json()['data'] == u'оживлённым'
 
 def test_server_should_be_http_1_1(httpbin):
