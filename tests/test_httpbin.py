@@ -30,4 +30,3 @@ def test_httpbin_join(httpbin):
 
 def test_httpbin_str(httpbin):
     assert httpbin + '/foo' == httpbin.url + '/foo'
-

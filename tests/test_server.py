@@ -5,11 +5,14 @@
 import requests
 from util import get_raw_http_response
 
+
 def test_content_type_header_not_automatically_added(httpbin):
     """
     The server was automatically adding this for some reason, see issue #5
     """
-    assert 'Content-Type' not in requests.get(httpbin + '/headers').json()['headers']
+    resp = requests.get(httpbin + '/headers').json()['headers']
+    assert 'Content-Type' not in resp
+
 
 def test_unicode_data(httpbin):
     """
@@ -19,16 +22,16 @@ def test_unicode_data(httpbin):
     resp = requests.post(
         httpbin + '/post',
         data=u'оживлённым'.encode('utf-8'),
-        headers= {
+        headers={
             'content-type': 'text/html; charset=utf-8',
         }
     )
     assert resp.json()['data'] == u'оживлённым'
 
+
 def test_server_should_be_http_1_1(httpbin):
     """
     The server should speak HTTP/1.1 since we live in the future, see issue #6
     """
-    assert get_raw_http_response(httpbin.host, httpbin.port, '/get').startswith(b'HTTP/1.1')
-
-
+    resp = get_raw_http_response(httpbin.host, httpbin.port, '/get')
+    assert resp.startswith(b'HTTP/1.1')
