@@ -96,6 +96,12 @@ pip install tox
 tox
 ```
 
+## Changelog
+
+* 0.0.2: Fixed a couple bugs with the wsgiref server to bring behavior in line
+  with httpbin.org, thanks @jakubroztocil for the bug reports
+* 0.0.1: Initial release
+
 ## License
 
 The MIT License (MIT)
