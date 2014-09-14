@@ -66,6 +66,23 @@ def test_that_my_library_works_kinda_ok(httpbin_both):
 
 Through the magic of pytest parametrization, this function will actually execute twice: once with an http url and once with an https url.
 
+## Using pytest-httpbin with unittest-style test cases
+
+I have provided 2 additional fixtures to make testing with class-based tests easier.  I have also provided a couple decorators that provide some syntactic sugar around the pytest method of adding the fixtures to class-based tests.  Just add the `use_class_based_httpbin` and/or `use_class_based_httpbin_secure` class decorators to your class, and then you can access httpbin using self.httpbin and self.httpbin_secure.
+
+```python
+import pytest_httpbin
+
+@pytest_httpbin.use_class_based_httpbin
+@pytest_httpbin.use_class_based_httpbin_secure
+class TestClassBassedTests(unittest.TestCase):
+    def test_http(self):
+        assert requests.get(self.httpbin.url + '/get').response
+
+    def test_http_secure(self):
+        assert requests.get(self.httpbin_secure.url + '/get').response
+```
+
 ## Installation
 
 All you need to do is this:

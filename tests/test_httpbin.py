@@ -1,4 +1,6 @@
+import unittest
 import requests
+import pytest_httpbin
 
 
 def test_httpbin_gets_injected(httpbin):
@@ -30,3 +32,12 @@ def test_httpbin_join(httpbin):
 
 def test_httpbin_str(httpbin):
     assert httpbin + '/foo' == httpbin.url + '/foo'
+
+@pytest_httpbin.use_class_based_httpbin
+@pytest_httpbin.use_class_based_httpbin_secure
+class TestClassBassedTests(unittest.TestCase):
+    def test_http(self):
+        assert requests.get(self.httpbin.url + '/get').status_code == 200
+
+    def test_http_secure(self):
+        assert requests.get(self.httpbin_secure.url + '/get').status_code == 200

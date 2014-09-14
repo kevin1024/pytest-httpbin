@@ -3,7 +3,6 @@ import pytest
 from httpbin import app as httpbin_app
 from . import serve
 
-
 @pytest.fixture(scope='session')
 def httpbin(request):
     server = serve.Server(application=httpbin_app)
@@ -26,3 +25,13 @@ def httpbin_both(request, httpbin, httpbin_secure):
         return httpbin
     elif request.param == 'https':
         return httpbin_secure
+
+
+@pytest.fixture(scope='class')
+def class_based_httpbin(request, httpbin):
+    request.cls.httpbin = httpbin
+
+@pytest.fixture(scope='class')
+def class_based_httpbin_secure(request, httpbin_secure):
+    request.cls.httpbin_secure = httpbin_secure
+
