@@ -14,6 +14,10 @@ class ServerHandler(SimpleHandler):
     server_software = 'Pytest-HTTPBIN/0.1.0'
     http_version = '1.1'
 
+    def cleanup_headers(self):
+        SimpleHandler.cleanup_headers(self)
+        self.headers['Connection'] = 'Close'
+
     def close(self):
         try:
             self.request_handler.log_request(
