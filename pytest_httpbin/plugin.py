@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 import pytest
 from httpbin import app as httpbin_app
-from . import serve
+from . import serve, certs
 
 @pytest.fixture(scope='session')
 def httpbin(request):
@@ -35,3 +35,7 @@ def class_based_httpbin(request, httpbin):
 def class_based_httpbin_secure(request, httpbin_secure):
     request.cls.httpbin_secure = httpbin_secure
 
+
+@pytest.fixture(scope='function')
+def httpbin_ca_bundle(monkeypatch):
+    monkeypatch.setenv('REQUESTS_CA_BUNDLE', certs.where())
