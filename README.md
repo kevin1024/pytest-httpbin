@@ -115,7 +115,10 @@ tox
 
 ## Changelog
 
+* 0.0.5:
+  * Fix broken version parsing in 0.0.4
 * 0.0.4:
+  * **Bad release: Broken version parsing**
   * Fix `BadStatusLine` error that occurs when sending multiple requests
     in a single session (PR #16). Thanks @msabramo!
   * Fix #9 ("Can't be installed at the same time than pytest?") (PR
