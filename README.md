@@ -121,8 +121,10 @@ tox
   * Fix #9 ("Can't be installed at the same time than pytest?") (PR
     #14). Thanks @msabramo!
   * Add `httpbin_ca_bundle` pytest fixture. With this fixture there is
-    no need to specify the bundle on every request. And you don't have
-    to care about where it is located (PR #8). Thanks @t-8ch!
+    no need to specify the bundle on every request, as it will
+    automatically set `REQUESTS_CA_BUNDLE` if using
+    [requests](http://docs.python-requests.org/). And you don't have to
+    care about where it is located (PR #8). Thanks @t-8ch!
 * 0.0.3: Add a couple test fixtures to make testing old class-based test suites
   easier
 * 0.0.2: Fixed a couple bugs with the wsgiref server to bring behavior in line
