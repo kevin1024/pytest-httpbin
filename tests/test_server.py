@@ -3,6 +3,7 @@
 # vim: set fileencoding=utf8 :
 
 import requests
+import pytest
 from util import get_raw_http_response
 
 
@@ -35,3 +36,17 @@ def test_server_should_be_http_1_1(httpbin):
     """
     resp = get_raw_http_response(httpbin.host, httpbin.port, '/get')
     assert resp.startswith(b'HTTP/1.1')
+
+def test_dont_crash_on_certificate_problems(httpbin_secure):
+    with pytest.raises(Exception):
+        # this request used to hang
+        requests.get(
+            httpbin_secure + '/get',
+            verify = True,
+            cert=__file__
+        )
+    # and this request would never happen
+    requests.get(
+        httpbin_secure + '/get',
+        verify = True,
+    )

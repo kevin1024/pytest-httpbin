@@ -60,6 +60,7 @@ class SecureWSGIServer(WSGIServer):
         """
         Negotiates SSL and then mimics BaseServer behavior.
         """
+        request.settimeout(1.0)
         ssock = ssl.wrap_socket(
             request,
             keyfile=os.path.join(CERT_DIR, 'key.pem'),

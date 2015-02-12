@@ -1,3 +1,3 @@
 #!/bin/bash
 
-py.test
+py.test $1
