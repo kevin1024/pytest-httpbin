@@ -115,6 +115,9 @@ tox
 
 ## Changelog
 
+* 0.0.6:
+  * Fix an issue where pypy was hanging when a request was made with an invalid
+    certificate
 * 0.0.5:
   * Fix broken version parsing in 0.0.4
 * 0.0.4:
