@@ -115,6 +115,8 @@ tox
 
 ## Changelog
 
+* 0.0.7:
+  * Update the certificates (they expired)
 * 0.0.6:
   * Fix an issue where pypy was hanging when a request was made with an invalid
     certificate
