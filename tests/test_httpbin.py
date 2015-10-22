@@ -40,6 +40,9 @@ def test_httpbin_join(httpbin):
 def test_httpbin_str(httpbin):
     assert httpbin + '/foo' == httpbin.url + '/foo'
 
+def test_chunked_encoding(httpbin_both):
+    assert requests.get(httpbin_both.url + '/stream/20').status_code == 200
+
 @pytest_httpbin.use_class_based_httpbin
 @pytest_httpbin.use_class_based_httpbin_secure
 class TestClassBassedTests(unittest.TestCase):
