@@ -8,7 +8,7 @@ Enter **pytest-httpbin**.  Pytest-httpbin creates a [pytest fixture](http://pyte
 
 ```python
 def test_that_my_library_works_kinda_ok(httpbin):
-    assert requests.get(httpbin.url + '/get/').status_code == 200
+    assert requests.get(httpbin.url + '/get').status_code == 200
 ```
 
 This replaces a test that might have looked like this before:
