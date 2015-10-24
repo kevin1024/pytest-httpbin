@@ -6,6 +6,11 @@ import requests
 import pytest
 from util import get_raw_http_response
 
+try:
+    from multiprocessing.pool import ThreadPool
+except ImportError:
+    ThreadPool = None
+
 
 def test_content_type_header_not_automatically_added(httpbin):
     """
@@ -36,6 +41,17 @@ def test_server_should_be_http_1_1(httpbin):
     """
     resp = get_raw_http_response(httpbin.host, httpbin.port, '/get')
     assert resp.startswith(b'HTTP/1.1')
+
+def test_server_should_handle_concurrent_connections(httpbin):
+    url = httpbin + '/get'
+    session = requests.Session()
+
+    def do_request(i):
+        r = session.get(url)
+    if ThreadPool is not None:
+        pool = ThreadPool(processes=50)
+        pool.map(do_request, range(100))
+
 
 def test_dont_crash_on_certificate_problems(httpbin_secure):
     with pytest.raises(Exception):
