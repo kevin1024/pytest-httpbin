@@ -35,12 +35,6 @@ def test_unicode_data(httpbin):
     assert resp.json()['data'] == u'оживлённым'
 
 
-def test_server_should_be_http_1_1(httpbin):
-    """
-    The server should speak HTTP/1.1 since we live in the future, see issue #6
-    """
-    resp = get_raw_http_response(httpbin.host, httpbin.port, '/get')
-    assert resp.startswith(b'HTTP/1.1')
 
 def test_server_should_handle_concurrent_connections(httpbin):
     url = httpbin + '/get'

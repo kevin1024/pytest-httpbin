@@ -1,75 +1,26 @@
 import os
+import pytest_httpbin
 import threading
 import ssl
-from wsgiref.simple_server import WSGIServer, make_server, WSGIRequestHandler
-from wsgiref.handlers import SimpleHandler
+from werkzeug.serving import make_server, load_ssl_context, WSGIRequestHandler
 from six.moves.urllib.parse import urljoin
 
 
 CERT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'certs')
 
-
-class ServerHandler(SimpleHandler):
-
-    server_software = 'Pytest-HTTPBIN/0.1.0'
-    http_version = '1.1'
-
-    def cleanup_headers(self):
-        SimpleHandler.cleanup_headers(self)
-        self.headers['Connection'] = 'Close'
-
-    def close(self):
-        try:
-            self.request_handler.log_request(
-                self.status.split(' ', 1)[0], self.bytes_sent
-            )
-        finally:
-            SimpleHandler.close(self)
-
-
 class Handler(WSGIRequestHandler):
+    server_version = 'pytest-httpbin/' + pytest_httpbin.__version__
 
-    def handle(self):
-        """Handle a single HTTP request"""
-
-        self.raw_requestline = self.rfile.readline()
-        if not self.parse_request():  # An error code has been sent, just exit
-            return
-
-        handler = ServerHandler(
-            self.rfile, self.wfile, self.get_stderr(), self.get_environ()
-        )
-        handler.request_handler = self      # backpointer for logging
-        handler.run(self.server.get_app())
-
-    def get_environ(self):
+    def make_environ(self):
         """
-        wsgiref simple server adds content-type text/plain to everything, this
+        werkzeug server adds content-type text/plain to everything, this
         removes it if it's not actually in the headers.
         """
         # Note: Can't use super since this is an oldstyle class in python 2.x
-        environ = WSGIRequestHandler.get_environ(self).copy()
+        environ = super(Handler, self).make_environ().copy()
         if self.headers.get('content-type') is None:
             del environ['CONTENT_TYPE']
         return environ
-
-
-class SecureWSGIServer(WSGIServer):
-
-    def finish_request(self, request, client_address):
-        """
-        Negotiates SSL and then mimics BaseServer behavior.
-        """
-        request.settimeout(1.0)
-        ssock = ssl.wrap_socket(
-            request,
-            keyfile=os.path.join(CERT_DIR, 'key.pem'),
-            certfile=os.path.join(CERT_DIR, 'cert.pem'),
-            server_side=True
-        )
-        self.RequestHandlerClass(ssock, client_address, self)
-        # WSGIRequestHandler seems to close the socket for us.
-        # Thanks, WSGIRequestHandler!!
 
 
 class Server(threading.Thread):
@@ -83,7 +34,8 @@ class Server(threading.Thread):
             host,
             port,
             self.app,
-            handler_class=Handler,
+            threaded=True,
+            request_handler=Handler,
             **kwargs
         )
         self.host = self._server.server_address[0]
@@ -114,6 +66,9 @@ class Server(threading.Thread):
 
 class SecureServer(Server):
     def __init__(self, host='127.0.0.1', port=0, application=None, **kwargs):
-        kwargs['server_class'] = SecureWSGIServer
-        super(SecureServer, self).__init__(host, port, application, **kwargs)
+        ssl_context = load_ssl_context(
+            cert_file=os.path.join(CERT_DIR, 'cert.pem'),
+            pkey_file=os.path.join(CERT_DIR, 'key.pem'),
+        )
+        super(SecureServer, self).__init__(host, port, application, ssl_context=ssl_context, **kwargs)
         self.protocol = 'https'
