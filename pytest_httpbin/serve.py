@@ -21,11 +21,16 @@ class Handler(WSGIRequestHandler):
             del environ['CONTENT_TYPE']
         return environ
 
-class MyThreadedWSGIServer(ThreadedWSGIServer):
+class ThreadedWSGIServerWithSSLTimeout(ThreadedWSGIServer):
+    """
+    This whole subclass exists just to set the ssl timeout before wrapping the
+    socket.  That's because on pypy, if there's an SSL failure opening the
+    connection, it will hang forever.
+    """
 
     def __init__(self, *args, **kwargs):
         self.protocol = kwargs.pop('protocol')
-        super(MyThreadedWSGIServer, self).__init__(*args, **kwargs)
+        super(ThreadedWSGIServerWithSSLTimeout, self).__init__(*args, **kwargs)
 
     def finish_request(self, request, client_address):
         """
@@ -50,7 +55,7 @@ class Server(threading.Thread):
 
     def __init__(self, host='127.0.0.1', port=0, application=None, protocol='http', **kwargs):
         self.app = application
-        self._server = MyThreadedWSGIServer(
+        self._server = ThreadedWSGIServerWithSSLTimeout(
             host,
             port,
             self.app,
