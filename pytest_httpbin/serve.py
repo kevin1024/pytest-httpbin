@@ -2,9 +2,8 @@ import os
 import pytest_httpbin
 import threading
 import ssl
-from werkzeug.serving import make_server, load_ssl_context, WSGIRequestHandler
+from werkzeug.serving import ThreadedWSGIServer, load_ssl_context, WSGIRequestHandler
 from six.moves.urllib.parse import urljoin
-
 
 CERT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'certs')
 
@@ -22,25 +21,46 @@ class Handler(WSGIRequestHandler):
             del environ['CONTENT_TYPE']
         return environ
 
+class MyThreadedWSGIServer(ThreadedWSGIServer):
+
+    def __init__(self, *args, **kwargs):
+        self.protocol = kwargs.pop('protocol')
+        super(MyThreadedWSGIServer, self).__init__(*args, **kwargs)
+
+    def finish_request(self, request, client_address):
+        """
+        Negotiates SSL and then mimics BaseServer behavior.
+        """
+        if self.protocol == 'https':
+            request.settimeout(1.0)
+            ssock = ssl.wrap_socket(
+                request,
+                keyfile=os.path.join(CERT_DIR, 'key.pem'),
+                certfile=os.path.join(CERT_DIR, 'cert.pem'),
+                server_side=True
+            )
+            self.RequestHandlerClass(ssock, client_address, self)
+        else:
+            self.RequestHandlerClass(request, client_address, self)
 
 class Server(threading.Thread):
     """
     HTTP server running a WSGI application in its own thread.
     """
 
-    def __init__(self, host='127.0.0.1', port=0, application=None, **kwargs):
+    def __init__(self, host='127.0.0.1', port=0, application=None, protocol='http', **kwargs):
         self.app = application
-        self._server = make_server(
+        self._server = MyThreadedWSGIServer(
             host,
             port,
             self.app,
-            threaded=True,
-            request_handler=Handler,
+            handler=Handler,
+            protocol=protocol,
             **kwargs
         )
         self.host = self._server.server_address[0]
         self.port = self._server.server_address[1]
-        self.protocol = 'http'
+        self.protocol = protocol
 
         super(Server, self).__init__(
             name=self.__class__,
@@ -66,9 +86,5 @@ class Server(threading.Thread):
 
 class SecureServer(Server):
     def __init__(self, host='127.0.0.1', port=0, application=None, **kwargs):
-        ssl_context = load_ssl_context(
-            cert_file=os.path.join(CERT_DIR, 'cert.pem'),
-            pkey_file=os.path.join(CERT_DIR, 'key.pem'),
-        )
-        super(SecureServer, self).__init__(host, port, application, ssl_context=ssl_context, **kwargs)
+        super(SecureServer, self).__init__(host, port, application, protocol='https', **kwargs)
         self.protocol = 'https'
