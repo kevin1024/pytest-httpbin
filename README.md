@@ -115,6 +115,8 @@ tox
 
 ## Changelog
 
+* 0.1.1:
+  * Fix weird hang with SSL on pypy (again)
 * 0.1.0:
   * Update server to use multithreaded werkzeug server
 * 0.0.7:
