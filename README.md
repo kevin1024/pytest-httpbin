@@ -115,6 +115,11 @@ tox
 
 ## Changelog
 
+* 0.2.0:
+  * Remove threaded HTTP server.  I built it for Requests, but they deleted
+    their threaded test since it didn't really work very well.  The threaded
+    server seems to cause some strange problems with HTTP chunking, so I'll
+    just remove it since nobody is using it (I hope)
 * 0.1.1:
   * Fix weird hang with SSL on pypy (again)
 * 0.1.0:
