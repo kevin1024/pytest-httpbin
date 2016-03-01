@@ -70,8 +70,8 @@ class SecureWSGIServer(WSGIServer):
             )
             self.RequestHandlerClass(ssock, client_address, self)
         except Exception as e:
-            print "pytest-httpbin server hit an exception serving request: %s" % e
-            print "attempting to ignore so the rest of the tests can run"
+            print("pytest-httpbin server hit an exception serving request: %s" % e)
+            print("attempting to ignore so the rest of the tests can run")
         # WSGIRequestHandler seems to close the socket for us.
         # Thanks, WSGIRequestHandler!!
 
