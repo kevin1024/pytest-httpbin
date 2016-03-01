@@ -115,6 +115,9 @@ tox
 
 ## Changelog
 
+* 0.2.1:
+  * Attempt to fix strange, impossible-to-reproduce bug with broken SSL certs
+    that only happens on Travis (#32) 
 * 0.2.0:
   * Remove threaded HTTP server.  I built it for Requests, but they deleted
     their threaded test since it didn't really work very well.  The threaded
