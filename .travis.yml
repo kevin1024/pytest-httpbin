@@ -1,11 +1,49 @@
 language: python
 sudo: false
+os:
+  - linux
 python:
-- 2.6
-- 2.7
-- 3.4
-- pypy
+  - 2.6
+  - 2.7
+  - pypy
+  - 3.4
+  - 3.5
+  - pypy3
 install:
-- pip install requests
-- python setup.py install
-script: ./runtests.sh
+  - |
+    if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
+      if [[ -n "$BREW_INSTALL" ]]; then
+        brew update
+        brew install "$BREW_INSTALL"
+      fi
+      sudo pip install tox
+    fi
+  - pip install tox
+matrix:
+
+  include:
+
+    # Manually defined OS X builds
+    # https://docs.travis-ci.com/user/multi-os/#Python-example-(unsupported-languages)
+
+    # Stock OSX Python
+    - os: osx
+      language: generic
+      env:
+        - TOXENV=py27
+
+    # Latest Python 2.x from Homebrew
+    - os: osx
+      language: generic
+      env:
+        - TOXENV=py27
+        - BREW_INSTALL=python
+
+    # Latest Python 3.x from Homebrew
+    - os: osx
+      language: generic
+      env:
+        - TOXENV=py35
+        - BREW_INSTALL=python3
+script:
+  - PATH="/usr/local/bin:$PATH" tox -e "$TOXENV"
