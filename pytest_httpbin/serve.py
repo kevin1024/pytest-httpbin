@@ -66,7 +66,8 @@ class SecureWSGIServer(WSGIServer):
                 request,
                 keyfile=os.path.join(CERT_DIR, 'key.pem'),
                 certfile=os.path.join(CERT_DIR, 'cert.pem'),
-                server_side=True
+                server_side=True,
+                suppress_ragged_eofs=False,
             )
             self.RequestHandlerClass(ssock, client_address, self)
         except Exception as e:
