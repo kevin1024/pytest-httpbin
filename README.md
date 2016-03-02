@@ -115,7 +115,10 @@ tox
 
 ## Changelog
 
-* 0.2.2: Fix bug with python3
+* 0.2.3: 
+  * Another attempt to fix #32 (Rare bug, only happens on Travis)
+* 0.2.2: 
+  * Fix bug with python3
 * 0.2.1:
   * Attempt to fix strange, impossible-to-reproduce bug with broken SSL certs
     that only happens on Travis (#32) [Bad release, breaks py3]
