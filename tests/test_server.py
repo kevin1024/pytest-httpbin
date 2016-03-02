@@ -43,7 +43,8 @@ def test_dont_crash_on_certificate_problems(httpbin_secure):
         requests.get(
             httpbin_secure + '/get',
             verify = True,
-            cert=__file__
+            cert=__file__,
+            timeout=3
         )
     # and this request would never happen
     requests.get(
