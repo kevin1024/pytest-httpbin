@@ -38,14 +38,15 @@ def test_server_should_be_http_1_1(httpbin):
     assert resp.startswith(b'HTTP/1.1')
 
 def test_dont_crash_on_certificate_problems(httpbin_secure):
-    with pytest.raises(Exception):
-        # this request used to hang
-        requests.get(
-            httpbin_secure + '/get',
-            verify = True,
-            cert=__file__,
-            timeout=3
-        )
+    for i in range(100):
+        with pytest.raises(Exception):
+            # this request used to hang
+            requests.get(
+                httpbin_secure + '/get',
+                verify = True,
+                cert=__file__,
+                timeout=3
+            )
     # and this request would never happen
     requests.get(
         httpbin_secure + '/get',
