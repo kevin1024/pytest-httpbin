@@ -50,7 +50,7 @@ setup(
     keywords='pytest-httpbin testing pytest httpbin',
     packages=find_packages(exclude=["contrib", "docs", "tests*"]),
     include_package_data = True, # include files listed in MANIFEST.in
-    install_requires = ['Flask','decorator','httpbin','six'],
+    install_requires = ['Flask','httpbin','six'],
 
     # the following makes a plugin available to pytest
     entry_points = {
