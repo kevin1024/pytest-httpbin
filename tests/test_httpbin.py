@@ -43,6 +43,14 @@ def test_httpbin_str(httpbin):
 def test_chunked_encoding(httpbin_both):
     assert requests.get(httpbin_both.url + '/stream/20').status_code == 200
 
+
+def test_post_chunked_binary(httpbin_both):
+    data1 = iter([b'data', b'to', b'send'])
+    url = httpbin_both.url + '/post'
+    resp = requests.post(url, data1)
+    assert resp.json()['data'] == b'datatosend'
+
+
 @pytest_httpbin.use_class_based_httpbin
 @pytest_httpbin.use_class_based_httpbin_secure
 class TestClassBassedTests(unittest.TestCase):
