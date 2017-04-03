@@ -4,8 +4,8 @@ python:
 - 2.6
 - 2.7
 - 3.4
+- 3.5
+- 3.6
 - pypy
-install:
-- pip install requests
-- python setup.py install
-script: ./runtests.sh
+install: pip install -U tox-travis
+script: tox
