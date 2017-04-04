@@ -77,7 +77,7 @@ class SecureWSGIServer(WSGIServer):
         # Thanks, WSGIRequestHandler!!
 
 
-class Server(threading.Thread):
+class Server(object):
     """
     HTTP server running a WSGI application in its own thread.
     """
@@ -95,13 +95,16 @@ class Server(threading.Thread):
         self.port = self._server.server_address[1]
         self.protocol = 'http'
 
-        super(Server, self).__init__(
+        self._thread = threading.Thread(
             name=self.__class__,
             target=self._server.serve_forever,
         )
 
     def __del__(self):
         self.stop()
+
+    def start(self):
+        self._thread.start()
 
     def __add__(self, other):
         return self.url + other
