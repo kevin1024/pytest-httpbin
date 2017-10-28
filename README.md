@@ -32,7 +32,7 @@ def test_that_my_library_works_kinda_ok(httpbin_secure):
     assert requests.get(httpbin_secure.url + '/get/').status_code == 200
 ```
 
-It's actually starting 2 web servers in separate threads in the background: one HTTP and one HTTPS. The servers are started on a random port, on the loopback interface on your machine. Pytest-httpbin includes a self-signed certificate.  If your library verifies certificates against a CA (and it should), you'll have to add the CA from pytest-httpbin.  The path to the pytest-httpbin CA bundle can by found like this `python -m pytest_httpbin.certs`.
+It's actually starting 2 web servers in separate threads in the background: one HTTP and one HTTPS. The servers are started on a random port (see bellow for fixed port support), on the loopback interface on your machine. Pytest-httpbin includes a self-signed certificate.  If your library verifies certificates against a CA (and it should), you'll have to add the CA from pytest-httpbin.  The path to the pytest-httpbin CA bundle can by found like this `python -m pytest_httpbin.certs`.
 
 For example in requests, you can set the `REQUESTS_CA_BUNDLE` python path.  You can run your tests like this:
 
@@ -83,6 +83,14 @@ class TestClassBassedTests(unittest.TestCase):
         assert requests.get(self.httpbin_secure.url + '/get').response
 ```
 
+## Running the server on fixed port
+
+Sometimes a randomized port can be a problem. Worry not, you can fix the port number to a desired value with the `HTTPBIN_HTTP_PORT` and `HTTPBIN_HTTPS_PORT` environment variables. If those are defined during pytest plugins are loaded, `httbin` and `httpbin_secure` fixtures will run on given ports. You can run your tests like this:
+
+```bash
+HTTPBIN_HTTP_PORT=8080 HTTPBIN_HTTPS_PORT=8443 py.test tests/
+```
+
 ## Installation
 
 All you need to do is this:
@@ -115,6 +123,8 @@ tox
 
 ## Changelog
 
+* unreleased:
+  * Allow to run httpbin on fixed port using environment variables
 * 0.2.3: 
   * Another attempt to fix #32 (Rare bug, only happens on Travis)
 * 0.2.2: 
