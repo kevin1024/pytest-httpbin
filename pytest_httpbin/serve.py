@@ -82,8 +82,12 @@ class Server(object):
     HTTP server running a WSGI application in its own thread.
     """
 
+    port_envvar = 'HTTPBIN_HTTP_PORT'
+
     def __init__(self, host='127.0.0.1', port=0, application=None, **kwargs):
         self.app = application
+        if self.port_envvar in os.environ:
+            port = int(os.environ[self.port_envvar])
         self._server = make_server(
             host,
             port,
@@ -101,7 +105,8 @@ class Server(object):
         )
 
     def __del__(self):
-        self.stop()
+        if hasattr(self, '_server'):
+            self.stop()
 
     def start(self):
         self._thread.start()
@@ -121,6 +126,8 @@ class Server(object):
 
 
 class SecureServer(Server):
+    port_envvar = 'HTTPBIN_HTTPS_PORT'
+
     def __init__(self, host='127.0.0.1', port=0, application=None, **kwargs):
         kwargs['server_class'] = SecureWSGIServer
         super(SecureServer, self).__init__(host, port, application, **kwargs)
