@@ -125,8 +125,10 @@ tox
 
 ## Changelog
 
-* unreleased:
-  * Allow to run httpbin on fixed port using environment variables
+* 0.3.0
+  * Allow to run httpbin on fixed port using environment variables (thanks @hroncok)
+  * Allow server to be thread.join()ed (thanks @graingert)
+  * Add support for Python 3.6 (thanks @graingert)
 * 0.2.3: 
   * Another attempt to fix #32 (Rare bug, only happens on Travis)
 * 0.2.2: 
