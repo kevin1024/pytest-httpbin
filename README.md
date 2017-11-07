@@ -93,7 +93,10 @@ HTTPBIN_HTTP_PORT=8080 HTTPBIN_HTTPS_PORT=8443 py.test tests/
 
 ## Installation
 
-All you need to do is this:
+[![PyPI Version](https://img.shields.io/pypi/v/pytest-httpbin.svg)](https://pypi.python.org/pypi/pytest-httpbin)
+[![Supported Versions](https://img.shields.io/pypi/pyversions/pytest-httpbin.svg)](https://pypi.python.org/pypi/pytest-httpbin)
+
+To install from [PyPI](https://pypi.python.org/pypi/pytest-httpbin), all you need to do is this:
 
 ```bash
 pip install pytest-httpbin
@@ -103,7 +106,7 @@ and your tests executed by pytest all will have access to the `httpbin` and `htt
 
 ## Support and dependencies
 
-pytest-httpbin suports Python 2.6, 2.7, 3.4, and pypy.  It will automatically install httpbin and flask when you install it from pypi.
+pytest-httpbin supports Python 2.6, 2.7, 3.4-3.6, and pypy.  It will automatically install httpbin and flask when you install it from PyPI.
 
 [httpbin](https://github.com/kennethreitz/httpbin) itself does not support python 2.6 as of version 0.6.0, when the Flask-common dependency was added.  If you need python 2.6 support pin the httpbin version to 0.5.0
 
