@@ -116,7 +116,7 @@ If you want to run pytest-httpbin's test suite, you'll need to install requests 
 
 ```bash
 pip install pytest
-/.runtests.sh
+./runtests.sh
 ```
 
 Also, you can use tox to run the tests on all supported python versions:
