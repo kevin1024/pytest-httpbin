@@ -128,8 +128,8 @@ tox
 
 ## Changelog
 
-* 0.3.1
-  * Update included self-signed cert to include IP address in SAN (See #52)
+* 1.0.0
+  * Update included self-signed cert to include IP address in SAN (See #52). Full version bump because this could be a breaking change for those depending on the certificate missing the IP address in the SAN (as it seems the requests test suite does)
   * Only use @pytest.fixture decorator once (thanks @hroncok)
   * Fix a few README typos (thanks @hemberger)
 * 0.3.0
