@@ -128,6 +128,10 @@ tox
 
 ## Changelog
 
+* 0.3.1
+  * Update included self-signed cert to include IP address in SAN (See #52)
+  * Only use @pytest.fixture decorator once (thanks @hroncok)
+  * Fix a few README typos (thanks @hemberger)
 * 0.3.0
   * Allow to run httpbin on fixed port using environment variables (thanks @hroncok)
   * Allow server to be thread.join()ed (thanks @graingert)
@@ -176,7 +180,7 @@ tox
 
 The MIT License (MIT)
 
-Copyright (c) 2014-2015 Kevin McCarthy
+Copyright (c) 2014-2019 Kevin McCarthy
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
