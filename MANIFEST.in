@@ -2,3 +2,4 @@
 # it's already declared in setup.py
 include pytest_httpbin/certs/*
 include DESCRIPTION.rst
+recursive-include tests *.py
