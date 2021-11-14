@@ -69,6 +69,7 @@ class SecureWSGIServer(WSGIServer):
                 server_side=True,
                 suppress_ragged_eofs=False,
             )
+            self.base_environ['HTTPS'] = 'yes'
             self.RequestHandlerClass(ssock, client_address, self)
         except Exception as e:
             print("pytest-httpbin server hit an exception serving request: %s" % e)

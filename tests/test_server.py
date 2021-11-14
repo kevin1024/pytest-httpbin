@@ -92,3 +92,14 @@ def test_fixed_port_environment_variables(protocol):
             del os.environ[envvar]
         else:
             os.environ[envvar] = envvar_original
+
+
+def test_redirect_location_is_https_for_secure_server(httpbin_secure):
+    assert httpbin_secure.url.startswith('https://')
+    response = requests.get(
+        httpbin_secure + "/redirect-to?url=/html",
+        allow_redirects=False
+    )
+    assert response.status_code == 302
+    assert response.headers.get('Location')
+    assert response.headers['Location'].startswith('https://')
