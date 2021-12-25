@@ -128,6 +128,9 @@ tox
 
 ## Changelog
 
+* 1.0.1
+  * httpbin_secure: fix redirect Location to have "https://" scheme (#62) - thanks @immerrr
+  * Include regression tests in pypi tarball (#56) - thanks @kmosiejczuk
 * 1.0.0
   * Update included self-signed cert to include IP address in SAN (See #52). Full version bump because this could be a breaking change for those depending on the certificate missing the IP address in the SAN (as it seems the requests test suite does)
   * Only use @pytest.fixture decorator once (thanks @hroncok)
