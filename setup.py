@@ -22,6 +22,7 @@ setup(
 
     description="Easily test your HTTP library against a local copy of httpbin",
     long_description=long_description,
+    long_description_content_type="text/x-rst",
 
     # The project URL.
     url='https://github.com/kevin1024/pytest-httpbin',
