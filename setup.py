@@ -53,6 +53,7 @@ setup(
     packages=find_packages(exclude=["contrib", "docs", "tests*"]),
     include_package_data = True, # include files listed in MANIFEST.in
     install_requires = ['httpbin','six'],
+    extras_require = {"test": ["requests", "pytest"]},
 
     # the following makes a plugin available to pytest
     entry_points = {
