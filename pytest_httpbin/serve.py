@@ -1,4 +1,5 @@
 import os
+import sys
 import threading
 import ssl
 from wsgiref.simple_server import WSGIServer, make_server, WSGIRequestHandler
@@ -7,6 +8,29 @@ from six.moves.urllib.parse import urljoin
 
 
 CERT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'certs')
+
+
+if sys.version_info >= (3, 6):
+    def wrap_socket(sock):
+        context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+        context.load_cert_chain(
+            os.path.join(CERT_DIR, 'cert.pem'),
+            os.path.join(CERT_DIR, 'key.pem'),
+        )
+        return context.wrap_socket(
+            sock=sock,
+            server_side=True,
+            suppress_ragged_eofs=False,
+        )
+else:
+    def wrap_socket(sock):
+        return ssl.wrap_socket(
+            sock=sock,
+            certfile=os.path.join(CERT_DIR, 'cert.pem'),
+            keyfile=os.path.join(CERT_DIR, 'key.pem'),
+            server_side=True,
+            suppress_ragged_eofs=False,
+        )
 
 
 class ServerHandler(SimpleHandler):
@@ -62,13 +86,7 @@ class SecureWSGIServer(WSGIServer):
         """
         request.settimeout(1.0)
         try:
-            ssock = ssl.wrap_socket(
-                request,
-                keyfile=os.path.join(CERT_DIR, 'key.pem'),
-                certfile=os.path.join(CERT_DIR, 'cert.pem'),
-                server_side=True,
-                suppress_ragged_eofs=False,
-            )
+            ssock = ssl.wrap_socket(request)
             self.base_environ['HTTPS'] = 'yes'
             self.RequestHandlerClass(ssock, client_address, self)
         except Exception as e:
