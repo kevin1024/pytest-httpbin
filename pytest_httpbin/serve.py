@@ -86,7 +86,7 @@ class SecureWSGIServer(WSGIServer):
         """
         request.settimeout(1.0)
         try:
-            ssock = ssl.wrap_socket(request)
+            ssock = wrap_socket(request)
             self.base_environ['HTTPS'] = 'yes'
             self.RequestHandlerClass(ssock, client_address, self)
         except Exception as e:
