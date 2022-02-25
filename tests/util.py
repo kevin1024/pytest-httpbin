@@ -6,8 +6,8 @@ def get_raw_http_response(host, port, path):
     CRLF = b"\r\n"
 
     request = [
-        b"GET " + path.encode('ascii') + b" HTTP/1.1",
-        b"Host: " + host.encode('ascii'),
+        b"GET " + path.encode("ascii") + b" HTTP/1.1",
+        b"Host: " + host.encode("ascii"),
         b"Connection: Close",
         b"",
         b"",
@@ -21,7 +21,7 @@ def get_raw_http_response(host, port, path):
     s.send(CRLF.join(request))
 
     # Get the response (in several parts, if necessary)
-    response = b''
+    response = b""
     buffer = s.recv(4096)
     while buffer:
         response += buffer
