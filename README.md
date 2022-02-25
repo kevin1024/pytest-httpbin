@@ -128,6 +128,9 @@ tox
 
 ## Changelog
 
+* 1.0.2
+  * Switch from travis to github actions
+  * This will be the last release to support Python 2.6, 2.7 or 3.6
 * 1.0.1
   * httpbin_secure: fix redirect Location to have "https://" scheme (#62) - thanks @immerrr
   * Include regression tests in pypi tarball (#56) - thanks @kmosiejczuk
