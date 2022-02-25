@@ -3,11 +3,13 @@
 # vim: set fileencoding=utf8 :
 
 import os
-import requests
+
 import pytest
-from util import get_raw_http_response
-from pytest_httpbin import serve
+import requests
 from httpbin import app as httpbin_app
+from util import get_raw_http_response
+
+from pytest_httpbin import serve
 
 
 def test_content_type_header_not_automatically_added(httpbin):

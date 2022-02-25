@@ -2,7 +2,6 @@ import os
 
 import pytest
 
-
 here = os.path.dirname(__file__)
 version_file = os.path.join(here, "version.py")
 

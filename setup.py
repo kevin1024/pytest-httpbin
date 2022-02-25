@@ -1,6 +1,7 @@
-from setuptools import setup, find_packages
 import codecs
 import os
+
+from setuptools import find_packages, setup
 
 __version__ = None
 with open("pytest_httpbin/version.py") as f:

@@ -1,10 +1,10 @@
 import os
-import threading
 import ssl
-from wsgiref.simple_server import WSGIServer, make_server, WSGIRequestHandler
+import threading
 from wsgiref.handlers import SimpleHandler
-from six.moves.urllib.parse import urljoin
+from wsgiref.simple_server import WSGIRequestHandler, WSGIServer, make_server
 
+from six.moves.urllib.parse import urljoin
 
 CERT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'certs')
 

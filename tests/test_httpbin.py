@@ -1,5 +1,7 @@
 import unittest
+
 import requests
+
 import pytest_httpbin
 
 

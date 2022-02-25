@@ -1,7 +1,9 @@
 from __future__ import absolute_import
+
 import pytest
 from httpbin import app as httpbin_app
-from . import serve, certs
+
+from . import certs, serve
 
 @pytest.fixture(scope='session')
 def httpbin(request):
