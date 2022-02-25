@@ -1,10 +1,10 @@
 # pytest-httpbin
 
-[![Build Status](https://travis-ci.org/kevin1024/pytest-httpbin.svg?branch=master)](https://travis-ci.org/kevin1024/pytest-httpbin)
+[![Build Status](https://github.com/kevin1024/pytest-httpbin/actions/workflows/main.yaml/badge.svg)](https://github.com/kevin1024/pytest-httpbin/actions/workflows/main.yaml)
 
 [httpbin](https://httpbin.org/) is an amazing web service for testing HTTP libraries.  It has several great endpoints that can test pretty much everything you need in a HTTP library.  The only problem is: maybe you don't want to wait for your tests to travel across the Internet and back to make assertions against a remote web service (speed), and maybe you want to work offline (convenience).
 
-Enter **pytest-httpbin**.  Pytest-httpbin creates a [pytest fixture](http://pytest.org/latest/fixture.html) that is dependency-injected into your tests.  It automatically starts up a HTTP server in a separate thread running httpbin and provides your test with the URL in the fixture.  Check out this example:
+Enter **pytest-httpbin**.  Pytest-httpbin creates a [pytest fixture](https://pytest.org/latest/fixture.html) that is dependency-injected into your tests.  It automatically starts up a HTTP server in a separate thread running httpbin and provides your test with the URL in the fixture.  Check out this example:
 
 ```python
 def test_that_my_library_works_kinda_ok(httpbin):
@@ -93,10 +93,10 @@ HTTPBIN_HTTP_PORT=8080 HTTPBIN_HTTPS_PORT=8443 py.test tests/
 
 ## Installation
 
-[![PyPI Version](https://img.shields.io/pypi/v/pytest-httpbin.svg)](https://pypi.python.org/pypi/pytest-httpbin)
-[![Supported Versions](https://img.shields.io/pypi/pyversions/pytest-httpbin.svg)](https://pypi.python.org/pypi/pytest-httpbin)
+[![PyPI Version](https://img.shields.io/pypi/v/pytest-httpbin.svg)](https://pypi.org/project/pytest-httpbin/)
+[![Supported Versions](https://img.shields.io/pypi/pyversions/pytest-httpbin.svg)](https://pypi.org/project/pytest-httpbin/)
 
-To install from [PyPI](https://pypi.python.org/pypi/pytest-httpbin), all you need to do is this:
+To install from [PyPI](https://pypi.org/project/pytest-httpbin/), all you need to do is this:
 
 ```bash
 pip install pytest-httpbin
@@ -108,7 +108,7 @@ and your tests executed by pytest all will have access to the `httpbin` and `htt
 
 pytest-httpbin supports Python 2.6, 2.7, 3.4-3.6, and pypy.  It will automatically install httpbin and flask when you install it from PyPI.
 
-[httpbin](https://github.com/kennethreitz/httpbin) itself does not support python 2.6 as of version 0.6.0, when the Flask-common dependency was added.  If you need python 2.6 support pin the httpbin version to 0.5.0
+[httpbin](https://github.com/postmanlabs/httpbin) itself does not support python 2.6 as of version 0.6.0, when the Flask-common dependency was added.  If you need python 2.6 support pin the httpbin version to 0.5.0
 
 ## Running the pytest-httpbin test suite
 
@@ -171,7 +171,7 @@ tox
   * Add `httpbin_ca_bundle` pytest fixture. With this fixture there is
     no need to specify the bundle on every request, as it will
     automatically set `REQUESTS_CA_BUNDLE` if using
-    [requests](http://docs.python-requests.org/). And you don't have to
+    [requests](https://docs.python-requests.org/). And you don't have to
     care about where it is located (PR #8). Thanks @t-8ch!
 * 0.0.3: Add a couple test fixtures to make testing old class-based test suites
   easier
