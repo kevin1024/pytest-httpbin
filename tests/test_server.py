@@ -1,4 +1,5 @@
 import os
+import contextlib
 
 import pytest
 import requests
@@ -68,6 +69,7 @@ def test_fixed_port_environment_variables(protocol):
     # just have different port to avoid adrress already in use
     # if the second test run too fast after the first one (happens on pypy)
     port = 12345 + len(protocol)
+    server = contextlib.nullcontext()
 
     try:
         envvar_original = os.environ.get(envvar, None)
@@ -76,10 +78,7 @@ def test_fixed_port_environment_variables(protocol):
         assert server.port == port
     finally:
         # if we don't do this, it blocks:
-        try:
-            server.start()
-            server.stop()
-        except UnboundLocalError:
+        with server:
             pass
 
         # restore the original environ:
