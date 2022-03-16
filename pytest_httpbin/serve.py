@@ -60,15 +60,16 @@ class SecureWSGIServer(WSGIServer):
         """
         request.settimeout(1.0)
         try:
-            ssock = ssl.wrap_socket(
-                request,
-                keyfile=os.path.join(CERT_DIR, "key.pem"),
-                certfile=os.path.join(CERT_DIR, "cert.pem"),
-                server_side=True,
-                suppress_ragged_eofs=False,
+            context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+            context.load_cert_chain(
+                os.path.join(CERT_DIR, "cert.pem"),
+                os.path.join(CERT_DIR, "key.pem"),
             )
-            self.base_environ["HTTPS"] = "yes"
-            self.RequestHandlerClass(ssock, client_address, self)
+            with context.wrap_socket(
+                request, server_side=True, suppress_ragged_eofs=False
+            ) as ssock:
+                self.base_environ["HTTPS"] = "yes"
+                self.RequestHandlerClass(ssock, client_address, self)
         except Exception as e:
             print("pytest-httpbin server hit an exception serving request: %s" % e)
             print("attempting to ignore so the rest of the tests can run")
@@ -105,6 +106,16 @@ class Server:
 
     def start(self):
         self._thread.start()
+
+    def __enter__(self):
+        self.start()
+        return self
+
+    def __exit__(self, *args, **kwargs):
+        self.stop()
+        suppress_exc = self._server.__exit__(*args, **kwargs)
+        self._thread.join()
+        return suppress_exc
 
     def __add__(self, other):
         return self.url + other

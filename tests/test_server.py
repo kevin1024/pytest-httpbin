@@ -1,7 +1,10 @@
+import contextlib
 import os
+import re
+import socket
 
 import pytest
-import requests
+import requests.exceptions
 from httpbin import app as httpbin_app
 from util import get_raw_http_response
 
@@ -40,9 +43,33 @@ def test_server_should_be_http_1_1(httpbin):
 
 
 def test_dont_crash_on_certificate_problems(httpbin_secure):
-    with pytest.raises(Exception):
+    with pytest.raises(requests.exceptions.SSLError):
         # this request used to hang
         requests.get(httpbin_secure + "/get", verify=True, cert=__file__)
+
+    # and this request would never happen
+    requests.get(
+        httpbin_secure + "/get",
+        verify=True,
+    )
+
+
+def test_dont_crash_on_handshake_timeout(httpbin_secure, capsys):
+    with socket.socket() as sock:
+        sock.connect((httpbin_secure.host, httpbin_secure.port))
+        # this request used to hang
+        assert sock.recv(1) == b""
+
+    assert (
+        re.match(
+            r"pytest-httpbin server hit an exception serving request: .* The "
+            "handshake operation timed out\nattempting to ignore so the rest "
+            "of the tests can run\n",
+            capsys.readouterr().out,
+        )
+        is not None
+    )
+
     # and this request would never happen
     requests.get(
         httpbin_secure + "/get",
@@ -68,6 +95,7 @@ def test_fixed_port_environment_variables(protocol):
     # just have different port to avoid adrress already in use
     # if the second test run too fast after the first one (happens on pypy)
     port = 12345 + len(protocol)
+    server = contextlib.nullcontext()
 
     try:
         envvar_original = os.environ.get(envvar, None)
@@ -76,10 +104,7 @@ def test_fixed_port_environment_variables(protocol):
         assert server.port == port
     finally:
         # if we don't do this, it blocks:
-        try:
-            server.start()
-            server.stop()
-        except UnboundLocalError:
+        with server:
             pass
 
         # restore the original environ:

@@ -6,18 +6,14 @@ from . import certs, serve
 
 @pytest.fixture(scope="session")
 def httpbin(request):
-    server = serve.Server(application=httpbin_app)
-    server.start()
-    request.addfinalizer(server.stop)
-    return server
+    with serve.Server(application=httpbin_app) as server:
+        yield server
 
 
 @pytest.fixture(scope="session")
 def httpbin_secure(request):
-    server = serve.SecureServer(application=httpbin_app)
-    server.start()
-    request.addfinalizer(server.stop)
-    return server
+    with serve.SecureServer(application=httpbin_app) as server:
+        yield server
 
 
 @pytest.fixture(scope="session", params=["http", "https"])

@@ -14,17 +14,17 @@ def get_raw_http_response(host, port, path):
     ]
 
     # Connect to the server
-    s = socket.socket()
-    s.connect((host, port))
+    with socket.socket() as s:
+        s.connect((host, port))
 
-    # Send an HTTP request
-    s.send(CRLF.join(request))
+        # Send an HTTP request
+        s.send(CRLF.join(request))
 
-    # Get the response (in several parts, if necessary)
-    response = b""
-    buffer = s.recv(4096)
-    while buffer:
-        response += buffer
+        # Get the response (in several parts, if necessary)
+        response = b""
         buffer = s.recv(4096)
+        while buffer:
+            response += buffer
+            buffer = s.recv(4096)
 
-    return response
+        return response
