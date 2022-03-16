@@ -4,7 +4,7 @@ import re
 import socket
 
 import pytest
-import requests
+import requests.exceptions
 from httpbin import app as httpbin_app
 from util import get_raw_http_response
 
@@ -42,7 +42,19 @@ def test_server_should_be_http_1_1(httpbin):
     assert resp.startswith(b"HTTP/1.1")
 
 
-def test_dont_crash_on_certificate_problems(httpbin_secure, capsys):
+def test_dont_crash_on_certificate_problems(httpbin_secure):
+    with pytest.raises(requests.exceptions.SSLError):
+        # this request used to hang
+        requests.get(httpbin_secure + "/get", verify=True, cert=__file__)
+
+    # and this request would never happen
+    requests.get(
+        httpbin_secure + "/get",
+        verify=True,
+    )
+
+
+def test_dont_crash_on_handshake_timeout(httpbin_secure, capsys):
     with socket.socket() as sock:
         sock.connect((httpbin_secure.host, httpbin_secure.port))
         # this request used to hang
