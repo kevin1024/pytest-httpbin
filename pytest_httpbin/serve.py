@@ -65,14 +65,11 @@ class SecureWSGIServer(WSGIServer):
                 os.path.join(CERT_DIR, "cert.pem"),
                 os.path.join(CERT_DIR, "key.pem"),
             )
-            ssock = context.wrap_socket(
+            with context.wrap_socket(
                 request, server_side=True, suppress_ragged_eofs=False
-            )
-            try:
+            ) as ssock:
                 self.base_environ["HTTPS"] = "yes"
                 self.RequestHandlerClass(ssock, client_address, self)
-            finally:
-                ssock.close()
         except Exception as e:
             print("pytest-httpbin server hit an exception serving request: %s" % e)
             print("attempting to ignore so the rest of the tests can run")
