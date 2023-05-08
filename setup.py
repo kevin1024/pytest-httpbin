@@ -47,7 +47,7 @@ setup(
     keywords="pytest-httpbin testing pytest httpbin",
     packages=find_packages(exclude=["contrib", "docs", "tests*"]),
     include_package_data=True,  # include files listed in MANIFEST.in
-    install_requires=["httpbin", "six"],
+    install_requires=["httpbin"],
     extras_require={"test": ["requests", "pytest", "werkzeug<2.1.0"]},
     python_requires=">=3.7",
     # the following makes a plugin available to pytest
