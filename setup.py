@@ -48,7 +48,7 @@ setup(
     packages=find_packages(exclude=["contrib", "docs", "tests*"]),
     include_package_data=True,  # include files listed in MANIFEST.in
     install_requires=["httpbin", "six"],
-    extras_require={"test": ["requests", "pytest"]},
+    extras_require={"test": ["requests", "pytest", "werkzeug<2.1.0"]},
     python_requires=">=3.7",
     # the following makes a plugin available to pytest
     entry_points={
