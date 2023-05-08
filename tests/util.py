@@ -2,7 +2,6 @@ import socket
 
 
 def get_raw_http_response(host, port, path):
-
     CRLF = b"\r\n"
 
     request = [
