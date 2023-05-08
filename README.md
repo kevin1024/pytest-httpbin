@@ -156,7 +156,7 @@ tox
 ```
 
 ## Changelog
-- 2.0.0rc2 (unreleased)
+- 2.0.0rc2
   - Add support for Python 3.11 and 3.12, drop dependency on six (#76)
 - 2.0.0rc1
   - Drop support for Python 2.6, 2.7, 3.4, 3.5 and 3.6 (#68)
