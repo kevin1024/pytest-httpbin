@@ -41,13 +41,14 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
     ],
     # What does your project relate to?
     keywords="pytest-httpbin testing pytest httpbin",
     packages=find_packages(exclude=["contrib", "docs", "tests*"]),
     include_package_data=True,  # include files listed in MANIFEST.in
-    install_requires=["httpbin", "six"],
-    extras_require={"test": ["requests", "pytest"]},
+    install_requires=["httpbin"],
+    extras_require={"test": ["requests", "pytest", "werkzeug<2.1.0"]},
     python_requires=">=3.7",
     # the following makes a plugin available to pytest
     entry_points={

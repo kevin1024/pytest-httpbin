@@ -1,16 +1,14 @@
 import os
 import ssl
 import threading
+from urllib.parse import urljoin
 from wsgiref.handlers import SimpleHandler
 from wsgiref.simple_server import WSGIRequestHandler, WSGIServer, make_server
-
-from six.moves.urllib.parse import urljoin
 
 CERT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "certs")
 
 
 class ServerHandler(SimpleHandler):
-
     server_software = "Pytest-HTTPBIN/0.1.0"
     http_version = "1.1"
 
