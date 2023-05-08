@@ -156,12 +156,11 @@ tox
 ```
 
 ## Changelog
-- 2.0.0rc2
-  - Add support for Python 3.11 and 3.12, drop dependency on six (#76)
-- 2.0.0rc1
+- 2.0.0
   - Drop support for Python 2.6, 2.7, 3.4, 3.5 and 3.6 (#68)
   - Add support for Python 3.7, 3.8, 3.9 and 3.10 (#68)
   - Avoid deprecation warnings and resource warnings (#71)
+  - Add support for Python 3.11 and 3.12, drop dependency on six (#76)
 - 1.0.2
   - Switch from travis to github actions
   - This will be the last release to support Python 2.6, 2.7 or 3.6
