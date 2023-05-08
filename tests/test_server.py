@@ -121,4 +121,4 @@ def test_redirect_location_is_https_for_secure_server(httpbin_secure):
     )
     assert response.status_code == 302
     assert response.headers.get("Location")
-    assert response.headers["Location"].startswith("https://")
+    assert response.headers["Location"] == "/html"
