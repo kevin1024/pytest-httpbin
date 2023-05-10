@@ -62,7 +62,7 @@ def test_dont_crash_on_handshake_timeout(httpbin_secure, capsys):
 
     assert (
         re.match(
-            r"pytest-httpbin server hit an exception serving request: .* The "
+            r"pytest-httpbin server hit an exception serving request:.* The "
             "handshake operation timed out\nattempting to ignore so the rest "
             "of the tests can run\n",
             capsys.readouterr().out,
