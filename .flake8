@@ -1,0 +1,5 @@
+[flake8]
+disable-noqa = True
+max-line-length = 88
+extend-ignore =
+    E203
