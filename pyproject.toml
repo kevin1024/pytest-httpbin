@@ -15,14 +15,13 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
 ]
 keywords = ["pytest-httpbin testing pytest httpbin"]
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 dependencies = ["httpbin"]
 dynamic = ["version"]
 
@@ -72,7 +71,7 @@ legacy_tox_ini = """
     requires=
         virtualenv>=20.13.2
         tox-gh-actions>=2.9.1
-    envlist = py37, py38, py39, py310, pypy3
+    envlist = py38, py39, py310, pypy3
 
     [testenv]
     package = wheel
