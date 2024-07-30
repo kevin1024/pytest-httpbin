@@ -86,6 +86,8 @@ legacy_tox_ini = """
     deps =
         build
         twine
+        httpbin @ https://github.com/graingert/httpbin/archive/refs/heads/patch-1.zip
+        cffi >= 1.17.0rc1
     commands =
         {envpython} -m release
         pyproject-build --sdist
