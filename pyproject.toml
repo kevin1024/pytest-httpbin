@@ -79,6 +79,7 @@ legacy_tox_ini = """
     wheel_build_env = .pkg
     extras = test
     commands = pytest -v -s {posargs}
+    install_command = python -I -m pip install --use-pep517 {opts} {packages}
 
     [testenv:release]
     deps =
