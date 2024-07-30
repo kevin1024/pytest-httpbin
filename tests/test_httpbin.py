@@ -1,11 +1,12 @@
 import ssl
 import sys
 import unittest
+import urllib.request
 
 import pytest
 import requests.exceptions
 
-import pytest_httpbin
+import pytest_httpbin.certs
 
 
 def test_httpbin_gets_injected(httpbin):
@@ -67,3 +68,10 @@ class TestClassBassedTests(unittest.TestCase):
 
     def test_http_secure(self):
         assert requests.get(self.httpbin_secure.url + "/get").status_code == 200
+
+
+def test_with_urllib2(httpbin_secure):
+    url = httpbin_secure.url + "/get"
+    context = ssl.create_default_context(cafile=pytest_httpbin.certs.where())
+    with urllib.request.urlopen(url, context=context) as response:
+        assert response.getcode() == 200
