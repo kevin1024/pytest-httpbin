@@ -60,8 +60,8 @@ class SecureWSGIServer(WSGIServer):
         try:
             context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
             context.load_cert_chain(
-                os.path.join(CERT_DIR, "cert.pem"),
-                os.path.join(CERT_DIR, "key.pem"),
+                os.path.join(CERT_DIR, "server.pem"),
+                os.path.join(CERT_DIR, "server.key"),
             )
             with context.wrap_socket(
                 request, server_side=True, suppress_ragged_eofs=False
