@@ -5,6 +5,7 @@ import urllib.request
 
 import pytest
 import requests.exceptions
+import urllib3
 
 import pytest_httpbin.certs
 
@@ -75,3 +76,13 @@ def test_with_urllib2(httpbin_secure):
     context = ssl.create_default_context(cafile=pytest_httpbin.certs.where())
     with urllib.request.urlopen(url, context=context) as response:
         assert response.getcode() == 200
+
+
+def test_with_urllib3(httpbin_secure):
+    with urllib3.PoolManager(
+        cert_reqs="CERT_REQUIRED",
+        ca_certs=pytest_httpbin.certs.where(),
+    ) as pool:
+        pool.request(
+            "POST", httpbin_secure.url + "/post", {"key1": "value1", "key2": "value2"}
+        )
