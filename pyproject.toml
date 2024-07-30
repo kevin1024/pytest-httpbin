@@ -39,7 +39,6 @@ pytest11 = {httpbin = "pytest_httpbin.plugin"}
 test = [
     "requests",
     "pytest",
-    "werkzeug<2.1.0",
 ]
 
 [tool.setuptools]
