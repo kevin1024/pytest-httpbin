@@ -157,7 +157,7 @@ tox
 
 ## Changelog
 
-- 2.1.0rc
+- 2.1.0
   - Drop support for Python 3.7 (#85)
   - Test against PyPy 3.10 (#77)
   - Add support for CPython 3.13 by regenerating the bundled certificates (#90)
