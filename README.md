@@ -161,9 +161,9 @@ tox
   - Drop support for Python 3.7 (#85)
   - Test against PyPy 3.10 (#77)
   - Add support for CPython 3.13 by regenerating the bundled certificates (#90)
-  - fix an issue where secure POST requests would fail with a connection reset
+  - Fix an issue where secure POST requests would fail with a connection reset
     by peer (#90)
-  - include a LICENCE
+  - Include a LICENCE
 - 2.0.0
   - Drop support for Python 2.6, 2.7, 3.4, 3.5 and 3.6 (#68)
   - Add support for Python 3.7, 3.8, 3.9 and 3.10 (#68)
