@@ -75,8 +75,6 @@ legacy_tox_ini = """
     [testenv]
     package = wheel
     wheel_build_env = .pkg
-    deps =
-        httpbin @ https://github.com/graingert/httpbin/archive/refs/heads/patch-1.zip
     extras = test
     commands = pytest -v -s {posargs}
     install_command = python -I -m pip install --use-pep517 {opts} {packages}
@@ -85,7 +83,6 @@ legacy_tox_ini = """
     deps =
         build
         twine
-        httpbin @ https://github.com/graingert/httpbin/archive/refs/heads/patch-1.zip
     commands =
         {envpython} -m release
         pyproject-build --sdist
