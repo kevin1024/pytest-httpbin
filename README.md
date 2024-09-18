@@ -156,6 +156,7 @@ tox
 ```
 
 ## Changelog
+
 - 2.1.0rc
   - Drop support for Python 3.7 (#85)
   - Test against PyPy 3.10 (#77)
