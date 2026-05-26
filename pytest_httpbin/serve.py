@@ -68,8 +68,8 @@ class SecureWSGIServer(WSGIServer):
                 address,
             )
         except Exception as e:
-            print("pytest-httpbin server hit an exception serving request: %s" % e)
-            print("attempting to ignore so the rest of the tests can run")
+            print("pytest-httpbin server hit an exception serving request: %s" % e, flush=True)
+            print("attempting to ignore so the rest of the tests can run", flush=True)
             raise
 
     def setup_environ(self):
