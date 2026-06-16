@@ -13,15 +13,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.8, 3.9, '3.10', 3.11, 3.12, 3.13, pypy-3.10]
-        os: [macOS-latest, ubuntu-latest, windows-latest]
+        python-version: [3.8, 3.9, '3.10', 3.11, 3.12, 3.13, 3.14, pypy-3.11]
+        os: [macos-latest, ubuntu-latest, windows-latest]
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set Up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
@@ -54,12 +54,12 @@ jobs:
       id-token: write
     steps:
       - name: Download dists for PyPI
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: ubuntu-latest_3.11_dist
           path: dist
 
-      - name: Display structure of donwloaded files
+      - name: Display structure of downloaded files
         run: ls -R
 
       - name: Publish package
