@@ -1,4 +1,6 @@
+import io
 import os
+import re
 import ssl
 import threading
 from urllib.parse import urljoin
@@ -6,6 +8,7 @@ from wsgiref.handlers import SimpleHandler
 from wsgiref.simple_server import WSGIRequestHandler, WSGIServer, make_server
 
 CERT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "certs")
+HEX_DIGITS = re.compile(rb"[0-9A-Fa-f]+")
 
 
 class ServerHandler(SimpleHandler):
@@ -33,11 +36,48 @@ class Handler(WSGIRequestHandler):
         if not self.parse_request():  # An error code has been sent, just exit
             return
 
-        handler = ServerHandler(
-            self.rfile, self.wfile, self.get_stderr(), self.get_environ()
-        )
+        stdin = self.rfile
+        environ = self.get_environ()
+        if self.headers.get("Transfer-Encoding", "").strip().lower() == "chunked":
+            # wsgiref doesn't decode chunked request bodies, and httpbin answers
+            # them with a 501 without reading them, so a client still sending the
+            # body gets a broken pipe. Decode the body here and give it to the
+            # application with a Content-Length instead, see issue #33
+            try:
+                body = self.read_chunked_body()
+            except ValueError:
+                self.send_error(400, "Bad chunked request body")
+                return
+            stdin = io.BytesIO(body)
+            environ["CONTENT_LENGTH"] = str(len(body))
+            del environ["HTTP_TRANSFER_ENCODING"]
+
+        handler = ServerHandler(stdin, self.wfile, self.get_stderr(), environ)
         handler.request_handler = self  # backpointer for logging
         handler.run(self.server.get_app())
+
+    def read_chunked_body(self):
+        """
+        Read a request body sent with Transfer-Encoding: chunked, and return it
+        decoded. Chunk extensions and trailer fields are ignored.
+        """
+        chunks = []
+        while True:
+            size_line = self.rfile.readline(65537)
+            size = size_line.split(b";", 1)[0].strip()
+            if not size_line.endswith(b"\n") or not HEX_DIGITS.fullmatch(size):
+                raise ValueError(f"bad chunk size line: {size_line!r}")
+            size = int(size, 16)
+            if size == 0:
+                break
+            chunk = self.rfile.read(size)
+            if len(chunk) != size or self.rfile.readline(3) not in (b"\r\n", b"\n"):
+                raise ValueError("chunk data doesn't match its size")
+            chunks.append(chunk)
+        # Skip the trailer section, which ends with an empty line
+        while self.rfile.readline(65537) not in (b"\r\n", b"\n", b""):
+            pass
+        return b"".join(chunks)
 
     def get_environ(self):
         """
